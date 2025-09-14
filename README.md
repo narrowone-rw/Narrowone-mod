@@ -12,8 +12,7 @@ This guide explains how to install and run our Narrow.One mods using **Tampermon
 - After installation, a black Tampermonkey icon will appear in your browser toolbar.
 
 ### 2. Open the Mod Script on GitHub
-- Go to this repository and open the `.user.js` file of the mod you want.
-- Click the **Raw** button at the top right of the file view to see the plain script code.
+- Go to this repository file of the mod you want.
 
 ### 3. Copy the Script Code
 - Select all of the script code (Ctrl+A → Ctrl+C / ⌘A → ⌘C).
