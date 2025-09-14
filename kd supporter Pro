@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.2
 // @description  Enhanced K/D display with animations and effects
-// @author       Wolfart
+// @author       wolfart
 // @match        *://*.narrow.one/*
 // @grant        none
 // ==/UserScript==
