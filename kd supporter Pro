@@ -8,6 +8,8 @@
 // @grant        none
 // ==/UserScript==
 
+// Thanks to wuren from CN for tweaking our code. CN's github is https://github.com/N1CNmod
+
 (function () {
     'use strict';
 
