@@ -1,0 +1,172 @@
+// ==UserScript==
+// @name         Narrow.One - Full Cyber Mod
+// @namespace    http://tampermonkey.net/
+// @version      1.8
+// @description  cyber full mod :3333
+// @author       WOLFART
+// @match        https://narrow.one/*
+// @grant        GM_addStyle
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // フォント
+    const fontLink = document.createElement('link');
+    fontLink.href = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap';
+    fontLink.rel = 'stylesheet';
+    document.head.appendChild(fontLink);
+
+    GM_addStyle(`
+        * {
+            font-family: 'Orbitron', sans-serif !important;
+            font-size: 101% !important;
+            text-shadow:
+                0 0 2px rgba(0, 255, 255, 0.5),
+                0 0 6px rgba(0, 255, 255, 0.4),
+                0 0 10px rgba(0, 255, 255, 0.3);
+        }
+    `);
+
+    // 背景
+    const cyberBackground = `
+        #cyber-loading, body::before {
+            background-color: #000;
+            background-image:
+                linear-gradient(rgba(0,255,204,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,204,0.05) 1px, transparent 1px),
+                radial-gradient(circle at center, #001010 0%, #000000 100%);
+            background-size: 40px 40px, 40px 40px, 100% 100%;
+        }
+    `;
+
+    GM_addStyle(`
+        /* ページ背景 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* UI container */
+        .dialog.wrinkledPaper,
+        .chat-container,
+        .health-ui-container,
+        .dialog-button {
+            border-radius: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
+
+        /* ローディング画面 */
+        #cyber-loading {
+            position: fixed !important;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2147483647;
+            transform: none !important;
+            color: #00ffcc;
+            font-family: 'Orbitron', monospace;
+            font-size: 3em;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .cyber-text {
+            text-shadow: 0 0 5px #00ffcc, 0 0 15px #00ffcc;
+            animation: softBlink 2s infinite;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        @keyframes softBlink {
+            0%,100% {opacity: 1;}
+            50% {opacity: 0.7;}
+        }
+
+        /* 画面グリッチ */
+        #cyber-glitch {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 2147483646;
+            opacity: 0;
+            background: rgba(0,255,204,0.05);
+            mix-blend-mode: difference;
+            animation: glitchAnim 0.15s linear;
+        }
+
+        @keyframes glitchAnim {
+            0% {transform: translate(0,0) skew(0deg);}
+            20% {transform: translate(-5px,3px) skew(1deg);}
+            40% {transform: translate(3px,-2px) skew(-1deg);}
+            60% {transform: translate(-2px,2px) skew(1deg);}
+            80% {transform: translate(2px,-1px) skew(-1deg);}
+            100% {transform: translate(0,0) skew(0deg);}
+        }
+
+        /* 統一背景 */
+        ${cyberBackground}
+    `);
+
+    // fakeだぜloading 画面　リロードしたらなるよ
+    const overlay = document.createElement('div');
+    overlay.id = 'cyber-loading';
+    overlay.innerHTML = `<div class="cyber-text">NOW LOADING… <span id="progress">0%</span></div>`;
+    document.documentElement.appendChild(overlay);
+
+    const progress = overlay.querySelector('#progress');
+    let percent = 0;
+    const interval = setInterval(() => {
+        percent += 100/15;
+        if (percent >= 100) {
+            percent = 100;
+            clearInterval(interval);
+        }
+        progress.textContent = Math.floor(percent) + '%';
+    }, 100);
+
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            overlay.style.opacity = '0';
+            overlay.style.transition = 'opacity 0.8s';
+            setTimeout(() => overlay.remove(), 800);
+        }, 1500);
+    });
+
+    // グリッチ。邪魔なら消して。
+    const glitchOverlay = document.createElement('div');
+    glitchOverlay.id = 'cyber-glitch';
+    document.body.appendChild(glitchOverlay);
+
+    function triggerGlitch() {
+        glitchOverlay.style.opacity = 1;
+        glitchOverlay.style.animation = 'glitchAnim 0.15s linear';
+        setTimeout(() => {
+            glitchOverlay.style.opacity = 0;
+        }, 150);
+    }
+
+    function scheduleGlitch() {
+        const interval = Math.random() * 20000 + 10000; // 10〜30秒
+        setTimeout(() => {
+            triggerGlitch();
+            scheduleGlitch();
+        }, interval);
+    }
+
+    window.addEventListener('load', () => {
+        scheduleGlitch();
+    });
+
+})();
